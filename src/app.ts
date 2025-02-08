@@ -1,7 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
+import "module-alias/register"
 import { errorHandler } from './middlewares/errorHandler'
 import { httpError } from '../types';
 import { modelLists } from './models/modelLists'
+import routes from './routes'
 
 const app = express()
 
@@ -17,9 +19,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Models
 modelLists;
 
+// Routes
+app.use("/api", routes)
+
 // global error handling
-app.use((err: httpError, req: Request, res: Response) => {
-  errorHandler(err, req, res);
-});
+app.use(errorHandler);
 
 export default app;

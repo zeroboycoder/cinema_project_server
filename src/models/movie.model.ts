@@ -2,42 +2,31 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize'
 import { sequelize } from '.'
 
-class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
+class Movie extends Model<
+  InferAttributes<Movie>,
+  InferCreationAttributes<Movie>
 > {
   declare id: CreationOptional<number>
-  declare email: CreationOptional<string>
-  declare password: CreationOptional<string>
   declare name: CreationOptional<string>
-  declare status: CreationOptional<boolean>
+  declare description: CreationOptional<string>
 
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 }
 
-User.init({
+Movie.init({
   id: {
     primaryKey: true,
     autoIncrement: true,
     type: DataTypes.INTEGER
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   name: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: false
   },
-  status: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: true
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
 
   createdAt: {
@@ -52,11 +41,11 @@ User.init({
   },
 }, {
   sequelize,
-  modelName: "User",
-  tableName: "user",
+  modelName: "Movie",
+  tableName: "movie",
   timestamps: true,
   paranoid: false
 })
 
 
-export default User;
+export default Movie;

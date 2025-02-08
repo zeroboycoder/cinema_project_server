@@ -1,14 +1,13 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { httpError } from '../../types'
-import { cleanObj } from '../utils'
 
-export const errorHandler = (error: httpError, req: Request, res: Response) => {
+export const errorHandler = (error: httpError, req: Request, res: Response, next: NextFunction) => {
+  console.log("reach here")
   const statusCode = error.statusCode || 400;
 
-  return res.status(500).json(cleanObj({
+  res.status(500).json({
     name: error.name,
     statusCode,
-    message: error.message,
-    stack: error.stack
-  }))
+    message: error.message
+  })
 }
