@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  app:
+    image: cinema_project
+    container_name: cinema_project
+    env_file:
+      - .env
+    ports:
+      - "8001:8001"

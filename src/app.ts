@@ -10,6 +10,7 @@ const app = express()
 // middlewares
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+app.use(express.static('uploads'))
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(req.url)

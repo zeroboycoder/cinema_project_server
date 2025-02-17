@@ -12,12 +12,16 @@ export const getMovies = async (req: Request, res: Response, next: NextFunction)
     order = String(order)
     search = String(search)
 
+    let where: any = {};
+
+    if (search) {
+      where["name"] = {
+        [Op.like]: `%${search}%`
+      }
+    }
+
     const movies = await MovieModel.findAll({
-      where: search ? {
-        name: {
-          [Op.like]: `%${search}%`
-        }
-      } : {},
+      where,
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [["createdAt", order]]
