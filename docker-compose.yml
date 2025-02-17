@@ -8,4 +8,4 @@ services:
       - .:/app
       - /app/node_modules
     container_name: cinema_project
-    command: npm start
+    command: npm run dev
