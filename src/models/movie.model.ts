@@ -1,6 +1,7 @@
 
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize'
 import { sequelize } from '.'
+import GenreModel from './genre.model'
 
 class Movie extends Model<
   InferAttributes<Movie>,
@@ -11,6 +12,7 @@ class Movie extends Model<
   declare description: CreationOptional<string>
   declare image: CreationOptional<string>
   declare duration: CreationOptional<number>
+  declare genre_id: CreationOptional<number>
 
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
@@ -38,6 +40,10 @@ Movie.init({
     type: DataTypes.INTEGER,
     allowNull: true
   },
+  genre_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
 
   createdAt: {
     type: DataTypes.DATE(6),
@@ -57,5 +63,16 @@ Movie.init({
   paranoid: false
 })
 
+GenreModel.hasMany(Movie, {
+  foreignKey: 'genre_id',
+  sourceKey: 'id',
+  as: 'movies'
+})
+
+Movie.belongsTo(GenreModel, {
+  foreignKey: 'genre_id',
+  targetKey: 'id',
+  as: 'genre'
+})
 
 export default Movie;

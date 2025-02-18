@@ -4,8 +4,8 @@ import { upload } from '@middlewares/fileMiddleware'
 
 const route = Router();
 
-route.post("/image/upload", upload.single('image'), controllers.uploadMovie)
+route.post("/create", upload.single('image'), controllers.uploadMovie)
 
-// route.post("/", controllers.loginAdmin)
+route.post("/genre/create", controllers.createGenre)
 
 export default route;

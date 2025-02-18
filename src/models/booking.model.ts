@@ -12,7 +12,8 @@ class Booking extends Model<
   declare user_id: CreationOptional<number>
   declare seat_number: CreationOptional<string>
   declare movie_id: CreationOptional<number>
-  declare showing_time: CreationOptional<string>
+  declare date: CreationOptional<string>
+  declare time: CreationOptional<string>
   declare card_number: CreationOptional<string>
   declare mmyy: CreationOptional<string>
   declare cvv: CreationOptional<string>
@@ -39,7 +40,11 @@ Booking.init({
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  showing_time: {
+  date: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  time: {
     type: DataTypes.STRING,
     allowNull: false
   },

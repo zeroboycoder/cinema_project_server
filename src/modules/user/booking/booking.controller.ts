@@ -6,13 +6,14 @@ import { successResponse } from '@utils/response'
 export const makeBooking = async (req: any, res: Response, next: NextFunction) => {
   try {
     const { id } = req.user;
-    let { movie_id, seat_number, showing_time, card_number, mmyy, cvv } = req.query
+    let { movie_id, seat_number, date, time, card_number, mmyy, cvv } = req.query
 
     await BookingModel.create({
       user_id: id,
       movie_id,
       seat_number,
-      showing_time,
+      date,
+      time,
       card_number,
       mmyy,
       cvv

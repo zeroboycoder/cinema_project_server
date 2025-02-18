@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Op } from 'sequelize'
 import MovieModel from '@models/movie.model'
+import GenreModel from '@models/genre.model'
 import { successResponse } from '@utils/response'
 
 export const getMovies = async (req: Request, res: Response, next: NextFunction) => {
@@ -44,6 +45,16 @@ export const getMovieDetail = async (req: Request, res: Response, next: NextFunc
     })
 
     successResponse(res, "Successfully retrived", movie)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getGenres = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const genres = await GenreModel.findAll()
+
+    return successResponse(res, "Successfully retrived", genres)
   } catch (error) {
     next(error)
   }
