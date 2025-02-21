@@ -66,3 +66,24 @@ export const getBookingDetail = async (req: any, res: Response, next: NextFuncti
     next(error)
   }
 }
+
+export const getBookedSeatByMovieId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+
+    const bookings = await BookingModel.findAll({
+      where: {
+        movie_id: id
+      }
+    })
+
+    let seats: any = []
+    bookings.forEach(booking => {
+      seats.push(booking.seat_number)
+    })
+
+    return successResponse(res, "Successfully retrived", seats)
+  } catch (error) {
+    next(error)
+  }
+}
