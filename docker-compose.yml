@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  app:
+  cinema_server:
     build: .
     ports:
       - "8001:8001"
