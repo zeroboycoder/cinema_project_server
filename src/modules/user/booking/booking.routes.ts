@@ -1,13 +1,14 @@
 import { Router } from 'express'
 import * as controllers from './booking.controller'
+import { verifyToken } from '../../../middlewares/jwt'
 
 const route = Router();
 
 route.get("/create", controllers.makeBooking)
 
-route.get("/list", controllers.getBookings)
+route.get("/list", verifyToken, controllers.getBookings)
 
-route.get("/by-id/:booking_id", controllers.getBookings)
+route.get("/by-id/:booking_id", verifyToken, controllers.getBookingDetail)
 
 route.get("/seat/by-id/:id", controllers.getBookedSeatByMovieId)
 

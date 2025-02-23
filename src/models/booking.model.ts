@@ -12,7 +12,7 @@ class Booking extends Model<
   declare user_id: CreationOptional<number>
   declare seat_number: CreationOptional<string>
   declare movie_id: CreationOptional<number>
-  declare date: CreationOptional<string>
+  declare date: CreationOptional<Date>
   declare time: CreationOptional<string>
   declare card_number: CreationOptional<string>
   declare mmyy: CreationOptional<string>

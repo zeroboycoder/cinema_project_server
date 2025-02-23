@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 import { Op } from 'sequelize'
-import MovieModel from '@models/movie.model'
-import GenreModel from '@models/genre.model'
+import UserModel from '@models/user.model'
 import { successResponse } from '@utils/response'
 
-export const getMovies = async (req: Request, res: Response, next: NextFunction) => {
+export const fetchUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let { page = 1, pageSize = 10, order = "DESC", search } = req.query
 
@@ -20,14 +19,14 @@ export const getMovies = async (req: Request, res: Response, next: NextFunction)
       }
     }
 
-    const movies = await MovieModel.findAll({
+    const movies = await UserModel.findAll({
       where,
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [["createdAt", order]]
     })
 
-    const totalCount = await MovieModel.count({
+    const totalCount = await UserModel.count({
       where,
     });
 
@@ -41,32 +40,6 @@ export const getMovies = async (req: Request, res: Response, next: NextFunction)
       totalCount: totalCount,
     }
     return successResponse(res, "Successfully retrived", dataPagination)
-  } catch (error) {
-    next(error)
-  }
-}
-
-export const getMovieDetail = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
-
-    const movie = await MovieModel.findOne({
-      where: {
-        id
-      }
-    })
-
-    successResponse(res, "Successfully retrived", movie)
-  } catch (error) {
-    next(error)
-  }
-}
-
-export const getGenres = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const genres = await GenreModel.findAll()
-
-    return successResponse(res, "Successfully retrived", genres)
   } catch (error) {
     next(error)
   }

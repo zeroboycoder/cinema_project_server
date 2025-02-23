@@ -12,7 +12,7 @@ class Movie extends Model<
   declare description: CreationOptional<string>
   declare image: CreationOptional<string>
   declare duration: CreationOptional<number>
-  declare genre_id: CreationOptional<number>
+  declare genres: CreationOptional<object>
 
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
@@ -40,8 +40,8 @@ Movie.init({
     type: DataTypes.INTEGER,
     allowNull: true
   },
-  genre_id: {
-    type: DataTypes.INTEGER,
+  genres: {
+    type: DataTypes.JSON,
     allowNull: true
   },
 
