@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { Op } from 'sequelize'
 import MovieModel from '@models/movie.model'
 import GenreModel from '@models/genre.model'
+import MovieDateModel from "@models/movieDate.model"
 import { successResponse } from '@utils/response'
 
 export const getMovies = async (req: Request, res: Response, next: NextFunction) => {
@@ -53,7 +54,14 @@ export const getMovieDetail = async (req: Request, res: Response, next: NextFunc
     const movie = await MovieModel.findOne({
       where: {
         id
-      }
+      },
+      include: [
+        {
+          model: MovieDateModel,
+          as: "movie_dates",
+          attributes: ["id", "date"]
+        }
+      ]
     })
 
     successResponse(res, "Successfully retrived", movie)
