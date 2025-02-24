@@ -4,7 +4,7 @@ import { verifyToken } from '../../../middlewares/jwt'
 
 const route = Router();
 
-route.get("/create", controllers.makeBooking)
+route.post("/create", verifyToken, controllers.makeBooking)
 
 route.get("/list", verifyToken, controllers.getBookings)
 
