@@ -26,6 +26,51 @@ export const makeBooking = async (req: any, res: Response, next: NextFunction) =
   }
 }
 
+export const updateBooking = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.user;
+    const { booking_id } = req.params;
+    let { seat_numbers, movie_date_id, time, card_number, mmyy, cvv, price } = req.body
+
+    await BookingModel.update({
+      seat_numbers, // array
+      movie_date_id,
+      time,
+      card_number,
+      mmyy,
+      cvv,
+      price
+    }, {
+      where: {
+        id: booking_id,
+        user_id: id
+      }
+    })
+
+    return successResponse(res, "Successfully update booking", {})
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const deleteBooking = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.user;
+    const { booking_id } = req.params;
+
+    await BookingModel.destroy({
+      where: {
+        id: booking_id,
+        user_id: id
+      }
+    })
+
+    return successResponse(res, "Successfully delete booking", {})
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const getBookings = async (req: any, res: Response, next: NextFunction) => {
   try {
     const { id } = req.user;
