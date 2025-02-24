@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from 'express'
 import fs from 'fs'
 import path from 'path'
 import { Op } from 'sequelize'
+import moment from 'moment'
 import UserModel from '@models/user.model'
 import MovieModel from '@models/movie.model'
+import MovieDateModel from "@models/movieDate.model"
 import GenreModel from '@models/genre.model'
 import BookingModel from '@models/booking.model'
 import { fileUpload } from '@utils/file'
@@ -12,12 +14,15 @@ import { successResponse } from '@utils/response'
 export const uploadMovie = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const body = Object.assign({}, req.body);
-    const { name, description, duration, genre } = body
+    const { name, description, duration, genre, movie_dates } = body
 
     const gerneNames = genre.split(",");
+    const movieDates = movie_dates.split(",");
+
     const result = await fileUpload(req.file as any)
     const url = result.secure_url;
 
+    // Create movie
     const data = {
       name,
       description,
@@ -25,7 +30,17 @@ export const uploadMovie = async (req: Request, res: Response, next: NextFunctio
       duration,
       genres: gerneNames
     }
-    await MovieModel.create(data)
+    const newMovie = await MovieModel.create(data)
+
+    // create movie_dates
+    await Promise.all(
+      movieDates.map(async (movie_date: any) => {
+        await MovieDateModel.create({
+          date: moment(movie_date).toDate(),
+          movie_id: newMovie.id
+        })
+      })
+    )
 
     // delete the file
     fs.unlinkSync(path.resolve(__dirname, `../../../uploads/${req.file?.filename}`))

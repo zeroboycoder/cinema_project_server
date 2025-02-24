@@ -3,6 +3,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOpt
 import { sequelize } from '.'
 import UserModel from './user.model';
 import MovieModel from './movie.model';
+import MovieDateModel from './movieDate.model'
 
 class Booking extends Model<
   InferAttributes<Booking>,
@@ -10,13 +11,14 @@ class Booking extends Model<
 > {
   declare id: CreationOptional<number>
   declare user_id: CreationOptional<number>
-  declare seat_number: CreationOptional<string>
+  declare seat_numbers: CreationOptional<object>
   declare movie_id: CreationOptional<number>
-  declare date: CreationOptional<Date>
+  declare movie_date_id: CreationOptional<number>
   declare time: CreationOptional<string>
   declare card_number: CreationOptional<string>
   declare mmyy: CreationOptional<string>
   declare cvv: CreationOptional<string>
+  declare price: CreationOptional<number>
 
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
@@ -32,16 +34,16 @@ Booking.init({
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  seat_number: {
-    type: DataTypes.STRING,
+  seat_numbers: {
+    type: DataTypes.JSON,
     allowNull: false
   },
   movie_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  date: {
-    type: DataTypes.STRING,
+  movie_date_id: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   time: {
@@ -58,6 +60,10 @@ Booking.init({
   },
   cvv: {
     type: DataTypes.STRING,
+    allowNull: false
+  },
+  price: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
 
@@ -101,6 +107,18 @@ Booking.belongsTo(MovieModel, {
   foreignKey: 'movie_id',
   targetKey: 'id',
   as: 'movie'
+})
+
+MovieDateModel.hasOne(Booking, {
+  foreignKey: 'movie_date_id',
+  sourceKey: 'id',
+  as: 'booking'
+})
+
+Booking.belongsTo(MovieDateModel, {
+  foreignKey: 'movie_date_id',
+  targetKey: 'id',
+  as: 'movie_date'
 })
 
 export default Booking;

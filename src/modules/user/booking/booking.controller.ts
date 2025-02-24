@@ -6,13 +6,13 @@ import { successResponse } from '@utils/response'
 export const makeBooking = async (req: any, res: Response, next: NextFunction) => {
   try {
     const { id } = req.user;
-    let { movie_id, seat_number, date, time, card_number, mmyy, cvv } = req.query
+    let { movie_id, seat_numbers, movie_date_id, time, card_number, mmyy, cvv } = req.query
 
     await BookingModel.create({
       user_id: id,
       movie_id,
-      seat_number,
-      date,
+      seat_numbers,
+      movie_date_id,
       time,
       card_number,
       mmyy,
@@ -79,7 +79,7 @@ export const getBookedSeatByMovieId = async (req: Request, res: Response, next: 
 
     let seats: any = []
     bookings.forEach(booking => {
-      seats.push(booking.seat_number)
+      // seats.push(booking.seat_numbers)
     })
 
     return successResponse(res, "Successfully retrived", seats)
