@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Op } from 'sequelize'
 import BookingModel from '@models/booking.model'
+import MovieModel from '@models/movie.model';
 import { successResponse } from '@utils/response'
 
 export const makeBooking = async (req: any, res: Response, next: NextFunction) => {
@@ -104,7 +105,13 @@ export const getBookingDetail = async (req: any, res: Response, next: NextFuncti
       where: {
         id: booking_id,
         user_id: id
-      }
+      },
+      include: [
+        {
+          model: MovieModel,
+          as: "movie"
+        }
+      ]
     })
 
     return successResponse(res, "Successfully retrived", booking)
