@@ -85,6 +85,10 @@ export const getBookings = async (req: any, res: Response, next: NextFunction) =
       where: {
         user_id: id
       },
+      include: [{
+        model: MovieModel,
+        as: "movie"
+      }],
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [["createdAt", order]]
