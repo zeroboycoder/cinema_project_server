@@ -13,24 +13,21 @@ export const getMovies = async (req: Request, res: Response, next: NextFunction)
     page = Number(page)
     pageSize = Number(pageSize)
     order = String(order)
+    search = search ? String(search) : search;
 
     let where: any = {};
 
-    // if (search) {
-    //   // search with name and gernes
-    //   where[Op.or] = [
-    //     { name: { [Op.like]: `%${search}%` } }, // Case-insensitive search in name
-    //     { genres: { [Op.contains]: [search] } } // Searching inside JSON array
-    //   ]
-    // }
+    if (search && search.length > 0) {
+      // search with name and gernes
+      search = search[0].toUpperCase() + search.slice(1).toLowerCase()
+      where[Op.or] = [
+        { name: { [Op.like]: `%${search}%` } }, // Case-insensitive search in name
+        Sequelize.literal(`JSON_UNQUOTE(JSON_SEARCH(genres, 'one', '${search}', NULL, '$[*]')) IS NOT NULL`)
+      ]
+    }
 
     const movies = await MovieModel.findAll({
-      where: {
-        [Op.or]: [
-          { name: { [Op.like]: `%${search}%` } }, // Case-insensitive search in name
-          Sequelize.literal(`JSON_SEARCH(genres, 'one', '${search}') IS NOT NULL`) // Search inside JSON field
-        ]
-      },
+      where,
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [["createdAt", order]]
