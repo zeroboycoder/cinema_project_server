@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { Sequelize } from 'sequelize'
 import { Op } from 'sequelize'
 import MovieModel from '@models/movie.model'
 import GenreModel from '@models/genre.model'
@@ -15,14 +16,21 @@ export const getMovies = async (req: Request, res: Response, next: NextFunction)
 
     let where: any = {};
 
-    if (search) {
-      where["name"] = {
-        [Op.like]: `%${search}%`
-      }
-    }
+    // if (search) {
+    //   // search with name and gernes
+    //   where[Op.or] = [
+    //     { name: { [Op.like]: `%${search}%` } }, // Case-insensitive search in name
+    //     { genres: { [Op.contains]: [search] } } // Searching inside JSON array
+    //   ]
+    // }
 
     const movies = await MovieModel.findAll({
-      where,
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%${search}%` } }, // Case-insensitive search in name
+          Sequelize.literal(`JSON_SEARCH(genres, 'one', '${search}') IS NOT NULL`) // Search inside JSON field
+        ]
+      },
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [["createdAt", order]]
