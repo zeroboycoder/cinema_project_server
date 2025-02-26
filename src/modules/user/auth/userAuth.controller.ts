@@ -31,7 +31,10 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     // generate token
     const token = generateToken({ id: newUser.id, type: 'user' })
 
-    successResponse(res, 'Register successfully', { token })
+    successResponse(res, 'Register successfully', {
+      token,
+      userId: newUser.id
+    })
   } catch (error) {
     console.log("error : ")
     next(error)
@@ -59,7 +62,10 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     // generate token
     const token = generateToken({ id: user.id, type: 'user' })
 
-    successResponse(res, 'Login successfully', { token })
+    successResponse(res, 'Login successfully', {
+      token,
+      userId: user.id
+    })
   } catch (error) {
     next(error);
   }
