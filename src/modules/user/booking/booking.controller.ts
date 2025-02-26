@@ -141,10 +141,10 @@ export const getBookedSeatByMovieId = async (req: Request, res: Response, next: 
 
     let seats: any = []
     bookings.forEach(booking => {
-      // seats.push(booking.seat_numbers)
+      seats.push(booking.seat_numbers)
     })
 
-    return successResponse(res, "Successfully retrived", seats)
+    return successResponse(res, "Successfully retrived", seats.flat())
   } catch (error) {
     next(error)
   }
