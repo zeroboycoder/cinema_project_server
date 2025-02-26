@@ -8,7 +8,7 @@ import { errorHandler } from '@middlewares/errorHandler'
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password } = cleanObj(req.body)
+    const { name, email, password } = cleanObj(req.body)
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -24,8 +24,9 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     }
 
     const newUser = await UserModel.create({
+      name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
     })
 
     // generate token
