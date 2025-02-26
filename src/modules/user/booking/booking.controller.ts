@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { Op } from 'sequelize'
 import BookingModel from '@models/booking.model'
 import MovieModel from '@models/movie.model';
+import MovieDateModel from '@models/movieDate.model'
 import { successResponse } from '@utils/response'
 
 export const makeBooking = async (req: any, res: Response, next: NextFunction) => {
@@ -114,6 +115,10 @@ export const getBookingDetail = async (req: any, res: Response, next: NextFuncti
         {
           model: MovieModel,
           as: "movie"
+        },
+        {
+          model: MovieDateModel,
+          as: 'movie_date'
         }
       ]
     })
