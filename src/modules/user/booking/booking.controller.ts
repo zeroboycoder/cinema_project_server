@@ -89,6 +89,9 @@ export const getBookings = async (req: any, res: Response, next: NextFunction) =
       include: [{
         model: MovieModel,
         as: "movie"
+      }, {
+        model: MovieDateModel,
+        as: "movie_date"
       }],
       limit: pageSize,
       offset: (page - 1) * pageSize,

@@ -185,6 +185,7 @@ export const uploadUpcomingMovie = async (req: Request, res: Response, next: Nex
 
 export const upcomingMoive = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log("hello")
     let { page = 1, pageSize = 10, order = "DESC" } = req.query
 
     page = Number(page)
