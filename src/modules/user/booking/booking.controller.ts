@@ -135,7 +135,7 @@ export const getBookingDetail = async (req: any, res: Response, next: NextFuncti
 export const getBookedSeatByMovieId = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    const { dateId } = req.query;
+    const dateId = Number(req.query.dateId);
 
     const bookings = await BookingModel.findAll({
       where: {
