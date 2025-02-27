@@ -5,6 +5,7 @@ import { Op } from 'sequelize'
 import moment from 'moment'
 import UserModel from '@models/user.model'
 import MovieModel from '@models/movie.model'
+import UpcomingMovieModel from '@models/upcomingMovie.model'
 import MovieDateModel from "@models/movieDate.model"
 import GenreModel from '@models/genre.model'
 import BookingModel from '@models/booking.model'
@@ -51,6 +52,8 @@ export const uploadMovie = async (req: Request, res: Response, next: NextFunctio
     next(error)
   }
 }
+
+
 
 export const createGenre = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -144,6 +147,83 @@ export const bookingDetail = async (req: Request, res: Response, next: NextFunct
     })
 
     return successResponse(res, "Successfully retrived", booking)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// upcoming movie
+export const uploadUpcomingMovie = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const body = Object.assign({}, req.body);
+    const { name, description, duration, genre, date } = body
+
+    const gerneNames = genre.split(",");
+
+    const result = await fileUpload(req.file as any)
+    const url = result.secure_url;
+
+    // Create movie
+    const data = {
+      name,
+      description,
+      image: url,
+      duration,
+      genres: gerneNames,
+      date: moment(date).toDate()
+    }
+    await UpcomingMovieModel.create(data)
+
+    // delete the file
+    fs.unlinkSync(path.resolve(__dirname, `../../../uploads/${req.file?.filename}`))
+
+    return successResponse(res, "Successfully created", {})
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const upcomingMoive = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let { page = 1, pageSize = 10, order = "DESC" } = req.query
+
+    page = Number(page)
+    pageSize = Number(pageSize)
+    order = String(order)
+
+    const movies = await UpcomingMovieModel.findAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [["createdAt", order]]
+    })
+
+    const totalCount = await UpcomingMovieModel.count();
+
+    const totalPage = Math.ceil(totalCount / pageSize);
+
+    const dataPagination = {
+      data: movies,
+      currentPage: page,
+      totalPage: totalPage,
+      pageSize: pageSize,
+      totalCount: totalCount,
+    }
+    return successResponse(res, "Successfully retrived", dataPagination)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const upcomingMoiveDetail = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params
+    const result = await UpcomingMovieModel.findOne({
+      where: {
+        id
+      }
+    })
+
+    return successResponse(res, "Successfully retrived", result)
   } catch (error) {
     next(error)
   }

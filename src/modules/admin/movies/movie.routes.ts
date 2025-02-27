@@ -6,6 +6,12 @@ const route = Router();
 
 route.post("/create", upload.single('image'), controllers.uploadMovie)
 
+route.post("/upcoming/create", upload.single('image'), controllers.uploadUpcomingMovie)
+
+route.get("/upcoming/lists", controllers.upcomingMoive)
+
+route.get("/upcoming/lists/:id", controllers.upcomingMoiveDetail)
+
 route.post("/genre/create", controllers.createGenre)
 
 route.get("/bookings", controllers.bookingLists)
