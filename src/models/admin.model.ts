@@ -8,7 +8,6 @@ class Admin extends Model<
   declare id: CreationOptional<number>
   declare email: CreationOptional<string>
   declare password: CreationOptional<string>
-  declare name: CreationOptional<string>
   declare status: CreationOptional<boolean>
 
   declare createdAt: CreationOptional<Date>
@@ -26,10 +25,6 @@ Admin.init({
     allowNull: false
   },
   password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  name: {
     type: DataTypes.STRING,
     allowNull: false
   },
