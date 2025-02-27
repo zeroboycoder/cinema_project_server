@@ -49,7 +49,7 @@ export const loginAdmin = async (req: Request, res: Response, next: NextFunction
     // generate token
     const token = generateToken({ id: admin.id, type: 'admin' })
 
-    successResponse(res, 'Login successfully', { token })
+    successResponse(res, 'Login successfully', { token, id: admin.id })
   } catch (error) {
     next(error);
   }
