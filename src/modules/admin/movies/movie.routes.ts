@@ -16,6 +16,8 @@ route.get("/upcoming/lists", controllers.upcomingMoive)
 
 route.get("/upcoming/lists/:id", controllers.upcomingMoiveDetail)
 
+route.delete("/upcoming/:id", controllers.upcomingMoiveDetail)
+
 route.post("/genre/create", controllers.createGenre)
 
 route.get("/bookings", controllers.bookingLists)

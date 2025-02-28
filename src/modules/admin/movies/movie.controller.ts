@@ -313,3 +313,17 @@ export const upcomingMoiveDetail = async (req: Request, res: Response, next: Nex
     next(error)
   }
 }
+
+export const deleteUpcomingMovie = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params
+    await UpcomingMovieModel.destroy({
+      where: {
+        id
+      }
+    })
+    return successResponse(res, "Successfully deleted", {})
+  } catch (error) {
+    next(error)
+  }
+}
