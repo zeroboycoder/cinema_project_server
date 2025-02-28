@@ -53,7 +53,91 @@ export const uploadMovie = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
+export const updateMovie = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const body = Object.assign({}, req.body);
+    const { movieId, name, description, duration, genre, movie_dates } = body
 
+    let gerneNames;
+    let movieDates = []
+    if (genre) gerneNames = genre.split(",");
+    if (movie_dates) movieDates = movie_dates.split(",");
+
+    let url;
+    if (req.file) {
+      const result = await fileUpload(req.file as any)
+      url = result.secure_url;
+    }
+
+    // Create movie
+    const movie = await MovieModel.findOne({
+      where: {
+        id: movieId
+      }
+    })
+
+    if (!movie) throw new Error("Movie not found")
+
+    const data = {
+      name: name || movie.name,
+      description: description || movie.description,
+      image: url || movie.image,
+      duration: duration || movie.duration,
+      genres: gerneNames || movie.genres
+    }
+
+    await MovieModel.update(data, {
+      where: { id: movieId }
+    })
+
+    // create movie_dates
+    if (movieDates.length > 0) {
+      await Promise.all(
+        movieDates.map(async (movie_date: any) => {
+          // find the movie date
+          const hasMovieDate = await MovieDateModel.findOne({
+            where: {
+              date: moment(movie_date).toDate()
+            }
+          })
+          // create movie date
+          if (!hasMovieDate) {
+            await MovieDateModel.create({
+              date: moment(movie_date).toDate(),
+              movie_id: movieId
+            })
+          }
+        })
+      )
+    }
+
+    if (req.file) {
+      // delete the file
+      fs.unlinkSync(path.resolve(__dirname, `../../../uploads/${req.file?.filename}`))
+    }
+
+    return successResponse(res, "Successfully updated", {})
+  } catch (error) {
+    console.log({ error })
+    next(error)
+  }
+}
+
+export const deleteMovie = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { movieId } = req.params;
+
+    await MovieModel.destroy({
+      where: {
+        id: movieId
+      }
+    })
+
+    return successResponse(res, "Successfully deleted", {})
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const createGenre = async (req: Request, res: Response, next: NextFunction) => {
   try {

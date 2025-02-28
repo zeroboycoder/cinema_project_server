@@ -6,6 +6,10 @@ const route = Router();
 
 route.post("/create", upload.single('image'), controllers.uploadMovie)
 
+route.put("/update", upload.single('image'), controllers.updateMovie)
+
+route.delete("/delete/:movieId", controllers.deleteMovie)
+
 route.post("/upcoming/create", upload.single('image'), controllers.uploadUpcomingMovie)
 
 route.get("/upcoming/lists", controllers.upcomingMoive)
